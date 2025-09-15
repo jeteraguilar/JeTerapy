@@ -1,0 +1,35 @@
+<mat-card class="form-card">
+  <h2>Novo Pagamento</h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div *ngIf="errorMsg" style="background:rgba(182,90,90,.12);border:1px solid rgba(182,90,90,.4);padding:8px 12px;border-radius:8px;color:#5e2b2d;margin-bottom:12px;font-size:.85rem;">
+      {{ errorMsg }}
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Consulta</mat-label>
+      <mat-select formControlName="appointmentId">
+        <mat-option *ngFor="let opt of appointmentOpts" [value]="opt.id">{{ opt.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Valor</mat-label>
+      <span matTextPrefix>R$&nbsp;</span>
+      <input matInput type="number" step="0.01" inputmode="decimal" formControlName="amount">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data de Vencimento</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dueDate">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-stroked-button type="button" (click)="goBack()">Voltar</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="saving">
+        {{ saving ? 'Salvando...' : 'Salvar' }}
+      </button>
+    </div>
+  </form>
+</mat-card>

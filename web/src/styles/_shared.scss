@@ -1,0 +1,58 @@
+@use 'palette' as *;
+
+// Shared mixins and utility placeholders to unify styling across feature screens.
+
+@mixin page-card {
+  padding: 12px;
+  border-radius: 12px;
+  background: $offwhite;
+  box-shadow: 0 4px 14px -6px rgba($brown-dark,.18);
+  border: 1px solid rgba($rose,.35);
+}
+
+@mixin list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+@mixin header-title {
+  margin: 0;
+  color: $brown-dark;
+  font-weight: 600;
+  letter-spacing: .5px;
+}
+
+@mixin table-standard {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  .mat-mdc-header-row { background: $brown; }
+  .mat-mdc-header-cell { color: $offwhite; font-weight: 600; }
+  .mat-mdc-row { color: $ink; transition: background .15s ease; }
+  .mat-mdc-row:hover { background: rgba($rose-light,.6); }
+}
+
+@mixin pager-bar {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  span { opacity: .75; color: $ink; font-size: .85rem; }
+}
+
+@mixin form-card {
+  padding: 1.5rem clamp(1rem, 3vw, 2rem);
+  background: linear-gradient(145deg, $offwhite 0%, $rose-light 140%);
+  border: 1px solid rgba($rose,.35);
+  border-radius: 18px;
+  box-shadow: 0 6px 22px -10px rgba($brown-dark,.28);
+  h2 { @include header-title; margin-bottom: 1rem; }
+  form { display: flex; flex-direction: column; gap: 1rem; }
+}
+
+// Utility class (global) - can be applied in component templates if needed.
+.spacer { flex: 1 1 auto; }

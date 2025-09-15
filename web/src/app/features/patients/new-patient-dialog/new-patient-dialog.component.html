@@ -1,0 +1,32 @@
+<h2 mat-dialog-title class="dialog-title">Pacientes</h2>
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>Nome</mat-label>
+  <input matInput formControlName="name" placeholder="" (input)="onNameInput($event)" (blur)="onNameBlur()" />
+  <mat-error *ngIf="form.get('name')?.invalid && form.get('name')?.touched">Preencha um nome válido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="email@email.com" />
+  <mat-error *ngIf="form.get('email')?.invalid && form.get('email')?.touched">Informe um email válido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Telefone</mat-label>
+      <input matInput formControlName="phone" placeholder="(11) 99999 9999" />
+      <mat-error *ngIf="isPhoneInvalid()">Informe um telefone válido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-row">
+      <mat-label>Observações</mat-label>
+      <textarea matInput formControlName="notes" rows="3"></textarea>
+    </mat-form-field>
+  </form>
+  <div class="error" *ngIf="error">{{ error }}</div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="cancel()" [disabled]="loading">Cancelar</button>
+  <button mat-raised-button color="primary" class="btn-primary" (click)="submit()" [disabled]="loading">Salvar</button>
+</div>

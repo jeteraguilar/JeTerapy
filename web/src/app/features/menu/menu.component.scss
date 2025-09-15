@@ -1,0 +1,45 @@
+@use '../../../styles/palette' as *;
+
+.menu-layout {
+  min-height: 100vh;
+  background: linear-gradient(160deg, $offwhite 0%, $rose-light 120%);
+  display: grid;
+  grid-template-columns: 280px 1fr;
+}
+
+.sidebar {
+  background: #fff;
+  border-right: 1px solid rgba(0,0,0,.08);
+  padding: 16px 0;
+}
+.sidebar .title {
+  margin: 0 16px 8px;
+  color: $brown-dark;
+}
+.sidebar ::ng-deep .mat-mdc-list-item {
+  border-radius: 0;
+}
+.sidebar ::ng-deep a.active .mdc-list-item__primary-text {
+  color: $brown-dark;
+  font-weight: 600;
+}
+
+.content {
+  padding: 16px;
+}
+.content-card {
+  min-height: 220px;
+}
+.content-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.panel-title {
+  margin: 0;
+  color: $offwhite;
+  background: $brown; /* use palette brown */
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+.placeholder { opacity: .7; margin-top: 12px; }

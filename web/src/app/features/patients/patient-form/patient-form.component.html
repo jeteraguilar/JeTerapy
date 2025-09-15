@@ -1,0 +1,24 @@
+<div class="patient-form-wrapper">
+	<h2>{{ title }}</h2>
+	<form (ngSubmit)="onSubmit()" autocomplete="off">
+		<mat-form-field appearance="outline" class="full-width">
+			<mat-label>Nome</mat-label>
+			<input matInput [(ngModel)]="model.name" name="name" required />
+		</mat-form-field>
+
+		<mat-form-field appearance="outline" class="full-width">
+			<mat-label>Email</mat-label>
+			<input matInput type="email" [(ngModel)]="model.email" name="email" />
+		</mat-form-field>
+
+		<mat-form-field appearance="outline" class="full-width">
+			<mat-label>Telefone</mat-label>
+			<input matInput [(ngModel)]="model.phone" name="phone" />
+		</mat-form-field>
+
+		<div class="actions">
+			<button mat-stroked-button type="button" (click)="onCancel()">Voltar</button>
+			<button mat-raised-button color="primary" type="submit" class="action-btn">Salvar</button>
+		</div>
+	</form>
+</div>

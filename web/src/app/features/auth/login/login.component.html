@@ -1,0 +1,45 @@
+<div class="auth-wrapper">
+  <div class="brand-panel">
+    <div class="overlay"></div>
+    <div class="brand-inner">
+  <!-- sem SVG nesta versão -->
+      <div class="brand-content">
+      <div class="logo-outline" aria-hidden="true">
+        <svg viewBox="0 0 120 120" role="img" focusable="false" aria-label="Cérebro e coração em contorno">
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6">
+            <!-- Metade cérebro (esquerda) -->
+            <path class="stroke-primary" d="M46 56c-6-2-9-7-9-13 0-9 7-16 16-16 3 0 6 1 8 2 2-5 7-8 12-8 8 0 14 6 14 14 0 2 0 3-1 5 5 2 8 7 8 12 0 8-6 14-14 14h-2"/>
+            <path class="stroke-primary" d="M55 32c-1 3-1 6 1 9m7-12c2 3 3 7 1 11m14-6c1 3 1 6-1 9m-34 3c2 0 4 1 6 3m8-3c2 2 3 4 3 7m9-4c2 1 3 3 3 6m-15 5c1 2 1 4 0 6m-8-5c-1 2-1 4 0 6"/>
+            <!-- Metade coração (direita) -->
+            <path class="stroke-accent" d="M70 78c-4-6-12-6-16 0-3 5-1 12 4 15 5 3 12 6 12 13 0-7 7-10 12-13 5-3 7-10 4-15-4-6-12-6-16 0z"/>
+          </g>
+        </svg>
+      </div>
+      <h1>AtendoPro</h1>
+      <p>Cuidado inteligente com empatia.</p>
+    </div>
+    </div>
+  </div>
+
+  <div class="form-panel">
+    <mat-card class="login-card" elevation="12">
+      <h2>Bem-vindo</h2>
+      <p class="subtitle">Acesse sua conta para continuar</p>
+      <form (ngSubmit)="onLogin()" class="login-form" autocomplete="off">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" [(ngModel)]="email" name="email" required />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Senha</mat-label>
+          <input matInput type="password" [(ngModel)]="password" name="password" required />
+        </mat-form-field>
+        <button mat-raised-button color="primary" class="full-width action-btn" type="submit" [disabled]="loading">
+          {{ loading ? 'Entrando...' : 'Entrar' }}
+        </button>
+      </form>
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <div class="footer-hint">© {{ year }} AtendoPro</div>
+    </mat-card>
+  </div>
+</div>

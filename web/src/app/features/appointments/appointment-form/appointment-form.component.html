@@ -1,0 +1,26 @@
+<mat-card class="form-card">
+  <h2>Novo Agendamento</h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <mat-form-field appearance="outline">
+      <mat-label>Paciente</mat-label>
+      <input matInput formControlName="patient">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data</mat-label>
+      <input matInput type="date" formControlName="date">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hora</mat-label>
+      <input matInput type="time" formControlName="time">
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-stroked-button type="button" (click)="goBack()">Voltar</button>
+      <button mat-raised-button color="primary" type="submit">Salvar</button>
+    </div>
+  </form>
+</mat-card>
+

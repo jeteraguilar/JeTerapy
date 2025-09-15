@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/atendopro
+    username: postgres
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.format_sql: true   # ✅ corrigido, sem duplicar chave
+    open-in-view: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: ${MAIL_USER:demo}
+    password: ${MAIL_PASS:demo}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: 8080
+
+jwt:
+  secret: mysupersafesecretkeywith32charsorMore123!
+  expiration: 3600000 # 1h em ms
+
+aws:
+  s3:
+    bucket: ${S3_BUCKET:atendopro-dev}
+    region: ${AWS_REGION:us-east-1}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

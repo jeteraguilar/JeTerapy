@@ -1,0 +1,14 @@
+{
+  "folders": [
+    { "path": "." },
+    { "path": "web" },
+    { "path": "api" }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/target": true,
+      "**/.angular": true
+    }
+  }
+}

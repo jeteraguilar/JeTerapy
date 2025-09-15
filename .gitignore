@@ -1,0 +1,31 @@
+# Node/Angular
+node_modules/
+.angular/
+dist/
+coverage/
+
+# Java/Maven
+api/target/
+.mvn/
+.mvn/wrapper/maven-wrapper.jar
+**/target/
+
+# Logs
+logs/
+*.log
+
+# OS/IDE
+.DS_Store
+Thumbs.db
+.idea/
+.project
+.classpath
+.settings/
+
+# Env
+.env
+.env.*.local
+
+# VS Code
+.vscode/*.log
+.history/

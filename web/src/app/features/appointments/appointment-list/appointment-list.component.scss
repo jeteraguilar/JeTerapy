@@ -1,0 +1,9 @@
+@use '../../../../styles/palette' as *;
+@use '../../../../styles/shared' as shared;
+
+.page-card { @include shared.page-card; }
+.list-header { @include shared.list-header; }
+.title-group { display:flex; align-items:center; gap:8px; }
+.title { @include shared.header-title; }
+.full-table { @include shared.table-standard; margin-top:8px; }
+.bottom-actions { display:flex; gap:12px; justify-content:flex-end; margin-top:16px; }

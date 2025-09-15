@@ -1,0 +1,251 @@
+// Paleta de cores (Ana Nakai)
+$offwhite: #FAF9F6;
+$gray: #808080;
+$brown: #76393B;
+$rose: #B48A8A;
+$brown-dark: #4A2022;
+$rose-light: #E6D2D2;
+$ink: #2e2a2a;
+
+// Derivações para estados (sem funções Sass para evitar warnings)
+$brown-hover: #5e2b2d; // ~ marrom +8% luminosidade
+$brown-press: #3f1a1c; // ~ marrom -8% luminosidade
+$rose-strong: #a66e6e; // tom mais escuro do rose
+
+// Layout principal
+.auth-wrapper {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  min-height: 100vh;
+  background: linear-gradient(120deg, $offwhite 0%, $rose-light 55%, $offwhite 100%);
+  color: $brown-dark;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+// Painel de marca / imagem
+.brand-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: transparent;
+}
+
+.brand-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Use uma imagem local para evitar bloqueio/hotlink: coloque o arquivo em src/assets/images */
+  background: url('/assets/images/Ana.jpeg') 55% center/cover no-repeat;
+  mix-blend-mode: normal;
+  opacity: 0.92;
+  filter: grayscale(15%) contrast(105%);
+}
+
+.brand-panel .overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba($brown-dark,.68) 0%, rgba($brown-dark,.35) 55%, rgba($brown-dark,.7) 100%);
+}
+
+.brand-inner {
+  position: relative;
+  text-align: center;
+  max-width: 420px;
+  padding: 2rem;
+  animation: fade-in 0.9s ease;
+  color: $offwhite;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
+}
+
+.logo-icon {
+  font-size: 4rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+}
+
+// Novo ícone em contorno (SVG)
+.logo-outline { width: 160px; margin: 0 auto 1rem; }
+.logo-outline svg { width: 100%; height: auto; display: block; }
+.logo-outline svg g { stroke-width: 3; }
+.stroke-primary { stroke: $rose; }
+.stroke-accent { stroke: $brown; }
+
+@media (max-width: 1100px) { .logo-outline { width: 140px; } }
+@media (max-width: 860px)  { .logo-outline { width: 120px; } }
+
+.brand-inner h1 {
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin: 0 0 0.75rem;
+}
+
+.brand-inner p {
+  font-size: 1.05rem;
+  opacity: 0.95;
+  line-height: 1.4;
+}
+
+// Frase sobre a imagem
+.quote {
+  margin: 0;
+  font-family: 'Georgia', serif;
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  letter-spacing: .3px;
+}
+.quote .line { margin: .15rem 0; }
+@media (max-width: 1100px) { .quote { font-size: 1.45rem; } }
+@media (max-width: 860px) { .quote { font-size: 1.35rem; } }
+
+.brand-panel::before {
+  content:'';
+  position:absolute; inset:0;
+  background: url('/assets/images/login-hero.jpg') 55% center/cover no-repeat;
+  opacity:.92;
+  filter: grayscale(12%) contrast(105%) brightness(96%);
+}
+
+// Painel do formulário
+.form-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2rem, 4vw, 4rem) 2rem;
+  background: linear-gradient(160deg, $offwhite 0%, $rose-light 120%);
+  position: relative;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 2.25rem 2.25rem 2rem;
+  background: linear-gradient(180deg, rgba($offwhite,.92), rgba($offwhite,.86));
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba($rose, .35);
+  border-radius: 22px;
+  box-shadow: 0 12px 34px -8px rgba($brown-dark,.28), 0 0 0 1px rgba($rose, .35) inset;
+  color: $ink;
+  // Evitar transform durante animação para manter a tipografia nítida
+  animation: fade-only 0.5s ease;
+}
+
+.login-card h2 {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+  font-size: 1.9rem;
+  color: $brown-dark;
+}
+
+.subtitle {
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+  opacity: 0.75;
+  letter-spacing: 0.5px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.full-width { width: 100%; }
+
+.action-btn {
+  height: 48px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.4px; // mais espaçamento para leitura confortável
+  line-height: 1.1;
+  white-space: nowrap;
+  border-radius: 14px;
+  background: linear-gradient(135deg, $brown 0%, $brown-hover 90%);
+  box-shadow: 0 8px 18px -6px rgba($brown-dark,.45), 0 0 0 1px rgba($rose,.5) inset;
+  transition: background .25s, box-shadow .25s; // evitar transição de transform
+  color: $offwhite !important; // cor do texto do botão
+  // melhorar renderização de texto
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  text-shadow: none;
+}
+
+.action-btn:hover {
+  // Evitar transform para não desfocar o texto em alguns navegadores
+  transform: none !important;
+  background: linear-gradient(135deg, $brown-hover 0%, $brown-dark 90%);
+  box-shadow: 0 12px 26px -8px rgba($brown-dark,.5), 0 0 0 1px rgba($rose,.55) inset;
+  color: $offwhite !important; // manter a cor no hover
+}
+
+.action-btn:active {
+  transform: translateY(0);
+  background: linear-gradient(135deg, $brown-press 0%, $brown-dark 90%);
+  color: $offwhite !important; // manter a cor no active
+}
+
+// Garantir que o rótulo interno do MDC use a mesma cor
+.action-btn .mdc-button__label {
+  color: inherit !important;
+  font-weight: inherit;
+  line-height: 1.1;
+  letter-spacing: 0.4px !important; // aplicar mesmo espaçamento no rótulo interno
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: none;
+}
+
+mat-form-field {
+  --mdc-outlined-text-field-container-color: rgba($rose, 0.22);
+  --mdc-outlined-text-field-outline-color: rgba($brown-dark, 0.4);
+  --mdc-outlined-text-field-label-text-color: rgba($brown-dark, 0.7);
+  width: 100%;
+}
+
+// Realce de foco mais consistente com a paleta
+.mat-mdc-form-field.mat-focused {
+  --mdc-outlined-text-field-outline-color: rgba($brown-dark, 0.8);
+}
+
+mat-label, input { color: $ink !important; }
+
+input::placeholder { color: rgba($ink, .45); }
+
+.error {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: $rose-strong;
+  letter-spacing: 0.3px;
+}
+
+.footer-hint {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  opacity: 0.55;
+}
+
+// Responsividade
+@media (max-width: 1100px) {
+  .auth-wrapper { grid-template-columns: 1fr 1fr; }
+  .brand-inner { padding: 1.5rem; }
+}
+
+@media (max-width: 860px) {
+  .auth-wrapper { grid-template-columns: 1fr; }
+  .brand-panel { display: none; }
+  .form-panel { padding-top: 4rem; padding-bottom: 4rem; }
+}
+
+// Animações
+@keyframes fade-in { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+@keyframes slide-up { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+@keyframes fade-only { from { opacity: 0; } to { opacity: 1; } }
