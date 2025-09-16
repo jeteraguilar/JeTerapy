@@ -1,0 +1,36 @@
+<h2 mat-dialog-title class="dialog-title">Editar Atendimento</h2>
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>Paciente</mat-label>
+      <input matInput formControlName="patient">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data</mat-label>
+      <input matInput type="date" formControlName="date">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hora</mat-label>
+      <input matInput type="time" formControlName="time">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-row">
+      <mat-label>Status</mat-label>
+      <input matInput formControlName="status">
+    </mat-form-field>
+  </form>
+  <div class="alert success" *ngIf="success">
+    <mat-icon>check_circle</mat-icon>
+    <span>{{ success }}</span>
+  </div>
+  <div class="alert error" *ngIf="error">
+    <mat-icon>error</mat-icon>
+    <span>{{ error }}</span>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="cancel()" [disabled]="!!success">Cancelar</button>
+  <button mat-raised-button color="primary" class="btn-primary" (click)="submit()" [disabled]="!!success">Salvar</button>
+</div>

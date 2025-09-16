@@ -4,13 +4,14 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validatio
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PatientService, Patient } from '../../../core/services/patient';
 
 @Component({
   selector: 'app-edit-patient-dialog',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule, MatIconModule],
   templateUrl: './edit-patient-dialog.component.html',
   styleUrls: ['./edit-patient-dialog.component.scss']
 })

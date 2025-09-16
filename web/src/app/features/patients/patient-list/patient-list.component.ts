@@ -18,7 +18,7 @@ import { EditPatientDialogComponent } from '../edit-patient-dialog/edit-patient-
 @Component({
   selector: 'app-patient-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatDialogModule, MatProgressSpinnerModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule, EditPatientDialogComponent],
+  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatDialogModule, MatProgressSpinnerModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule],
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.scss']
 })
@@ -27,6 +27,7 @@ export class PatientList implements OnInit {
   patients: Patient[] = [];
   loading = true;
   error = '';
+  success = '';
   page = 0;
   size = 10;
   total = 0;
@@ -72,8 +73,10 @@ export class PatientList implements OnInit {
           this.patients = this.patients.filter(x => x.id !== p.id);
           this.total = Math.max(0, this.total - 1);
           if (this.patients.length === 0 && this.page > 0) { this.page--; this.load(); }
+          this.success = 'Paciente excluído com sucesso!';
+          setTimeout(() => { this.success = ''; }, 2500);
         },
-        error: () => { alert('Falha ao excluir paciente.'); }
+        error: () => { this.error = 'Falha ao excluir paciente.'; setTimeout(() => (this.error = ''), 3500); }
       });
     });
   }
@@ -88,6 +91,8 @@ export class PatientList implements OnInit {
         // Inserir no início e manter ordenação local simples
         this.patients = [result, ...this.patients].sort((a,b) => (a.name||'').localeCompare(b.name||'', 'pt-BR', { sensitivity: 'base' }));
         this.total++;
+        this.success = 'Paciente criado com sucesso!';
+        setTimeout(() => { this.success = ''; }, 2500);
       }
     });
   }
@@ -102,6 +107,8 @@ export class PatientList implements OnInit {
           this.patients[idx] = result;
           this.patients = [...this.patients]; // trigger change detection
         }
+        this.success = 'Paciente atualizado com sucesso!';
+        setTimeout(() => { this.success = ''; }, 2500);
       }
     });
   }

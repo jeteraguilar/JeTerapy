@@ -3,7 +3,10 @@
 		<mat-progress-spinner mode="indeterminate" diameter="48"></mat-progress-spinner>
 		<span>Aguardando dados…</span>
 	</div>
-	<div *ngIf="error" class="error">{{ error }}</div>
+	<div *ngIf="error" class="alert error" style="margin: 8px 0;">
+		<mat-icon>error</mat-icon>
+		<span>{{ error }}</span>
+	</div>
 
 	<div *ngIf="!loading && !error" class="content">
 		<mat-card class="page-card">
@@ -19,6 +22,11 @@
 					<button mat-raised-button color="primary" (click)="search()" class="action-btn small btn-primary">Buscar</button>
 					<p class="subtitle">{{ total }} cadastrados</p>
 				</div>
+			</div>
+
+			<div *ngIf="success" class="alert success" style="margin: 8px 0;">
+				<mat-icon>check_circle</mat-icon>
+				<span>{{ success }}</span>
 			</div>
 
 			<table mat-table [dataSource]="patients" class="mat-elevation-z2 full-table">

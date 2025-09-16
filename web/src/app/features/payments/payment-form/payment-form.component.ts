@@ -35,6 +35,7 @@ export class PaymentFormComponent {
   form!: FormGroup;
   saving = false;
   errorMsg = '';
+  successMsg = '';
   // Ids devem ser UUID (36 chars) para compatibilidade com a API
   appointmentOpts = [
     { id: '11111111-1111-1111-1111-111111111111', label: 'Terapia' },
@@ -82,7 +83,11 @@ export class PaymentFormComponent {
     console.log('[PAYMENTS] Salvando pagamento', payload);
   const obs = id ? this.service.update(id, payload) : this.service.create(payload);
     obs.subscribe({
-      next: () => { this.router.navigate(['/payments']); },
+      next: () => {
+        this.successMsg = 'Pagamento salvo com sucesso!';
+        this.saving = false;
+        setTimeout(() => this.router.navigate(['/payments']), 1200);
+      },
       error: (err) => {
         console.error('Erro ao salvar pagamento', err);
         const backendMsg = err?.error?.message || err?.error?.error || '';

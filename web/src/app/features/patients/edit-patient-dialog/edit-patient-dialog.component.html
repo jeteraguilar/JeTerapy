@@ -24,8 +24,14 @@
       <textarea matInput formControlName="notes" rows="3"></textarea>
     </mat-form-field>
   </form>
-  <div class="error" *ngIf="error">{{ error }}</div>
-  <div class="success" *ngIf="success">{{ success }}</div>
+  <div class="alert success" *ngIf="success">
+    <mat-icon>check_circle</mat-icon>
+    <span>{{ success }}</span>
+  </div>
+  <div class="alert error" *ngIf="error">
+    <mat-icon>error</mat-icon>
+    <span>{{ error }}</span>
+  </div>
 </div>
 <div mat-dialog-actions align="end">
   <button mat-stroked-button (click)="cancel()" [disabled]="loading || !!success">Cancelar</button>

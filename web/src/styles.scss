@@ -94,3 +94,25 @@ button:focus-visible, .mdc-button:focus-visible { outline: 2px solid $rose; outl
 
 // Secondary helper class for stroked emphasis
 .btn-secondary { @extend .mat-mdc-outlined-button; }
+
+/* Global alert banners (success/error) */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+.alert .mat-icon { font-size: 20px; height: 20px; width: 20px; }
+.alert.success {
+  background: #e9f6ec; /* light green */
+  color: #1b7e2a; /* text green */
+}
+.alert.success .mat-icon { color: #1b7e2a; }
+.alert.error {
+  background: #fdecee; /* light red */
+  color: #b71c1c; /* text red */
+}
+.alert.error .mat-icon { color: #b71c1c; }
