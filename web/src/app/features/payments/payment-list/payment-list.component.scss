@@ -8,3 +8,8 @@
 .full-table { @include shared.table-standard; }
 .full-table td { color: $gray; }
 .bottom-actions { display:flex; gap:12px; justify-content:flex-end; margin-top:16px; }
+
+/* Align title color with Patients */
+.title { color: $brown !important; }
+/* Unify primary buttons visuals */
+.btn-primary { background-color: $brown !important; color: $offwhite !important; }

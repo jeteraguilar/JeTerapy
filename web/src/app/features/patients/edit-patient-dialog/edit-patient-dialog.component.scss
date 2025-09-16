@@ -1,22 +1,5 @@
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}.full-row{grid-column:1/-1}.error{color:#b71c1c;margin-top:8px}
 
-/* Prevent label/outline breaking while typing by enforcing consistent heights */
-:host ::ng-deep .mat-mdc-form-field-appearance-outline .mdc-text-field--outlined {
-	min-height: 56px;
-}
-:host ::ng-deep .mat-mdc-form-field-infix {
-	padding-top: 12px; padding-bottom: 12px;
-}
-/* Reserve espaço fixo para mensagens de erro/ajuda e evitar "pulo" ao digitar */
-:host ::ng-deep .mat-mdc-form-field-subscript-wrapper { min-height: 20px; }
-/* Garantir que o campo ocupe toda a coluna do grid */
-.form-grid .mat-mdc-form-field { width: 100%; }
-/* Primary button style aligned with Patients list */
-.btn-primary { background-color: #76393B !important; color: #FAF9F6 !important; }
-
-.dialog-title{
-	margin:0; font-weight:600; letter-spacing:.5px; color:#76393B;
-}
 .success {
 	color: #1b7e2a;
 	background: #e6fbe9;
@@ -26,4 +9,18 @@
 	font-weight: 500;
 	text-align: center;
 	box-shadow: 0 1px 4px #0001;
+}
+
+:host ::ng-deep .mat-mdc-form-field-appearance-outline .mdc-text-field--outlined {
+	min-height: 56px;
+}
+:host ::ng-deep .mat-mdc-form-field-infix {
+	padding-top: 12px; padding-bottom: 12px;
+}
+.form-grid .mat-mdc-form-field { width: 100%; }
+:host ::ng-deep .mat-mdc-form-field-subscript-wrapper { min-height: 20px; }
+.btn-primary { background-color: #76393B !important; color: #FAF9F6 !important; }
+
+.dialog-title{
+	margin:0; font-weight:600; letter-spacing:.5px; color:#76393B;
 }

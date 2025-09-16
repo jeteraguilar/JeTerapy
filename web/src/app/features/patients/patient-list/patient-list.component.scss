@@ -1,5 +1,7 @@
 @use '../../../../styles/palette' as *;
 @use '../../../../styles/shared' as shared;
+.actions-col, .actions-cell .actions-wrap { white-space: nowrap; }
+
 
 .patients-page {
 	padding: clamp(12px, 3vw, 24px);
@@ -85,12 +87,6 @@
 :host ::ng-deep th.mat-mdc-header-cell.mat-column-actions,
 :host ::ng-deep td.mat-mdc-cell.mat-column-actions {
 	width: 180px; min-width: 180px; max-width: 180px; text-align: left; white-space: nowrap; overflow: hidden;
-}
-
-/* Match header row background to primary button color */
-.full-table {
-	.mat-mdc-header-row { background: $brown !important; }
-	.mat-mdc-header-cell { color: $offwhite; }
 }
 
 /* Unify primary buttons visuals */

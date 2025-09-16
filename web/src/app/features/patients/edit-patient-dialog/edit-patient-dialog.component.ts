@@ -1,41 +1,41 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PatientService, Patient } from '../../../core/services/patient';
 
 @Component({
-  selector: 'app-new-patient-dialog',
+  selector: 'app-edit-patient-dialog',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule],
-  templateUrl: './new-patient-dialog.component.html',
-  styleUrls: ['./new-patient-dialog.component.scss']
+  templateUrl: './edit-patient-dialog.component.html',
+  styleUrls: ['./edit-patient-dialog.component.scss']
 })
-export class NewPatientDialogComponent {
+export class EditPatientDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
-  private dialogRef = inject(MatDialogRef<NewPatientDialogComponent>);
+  private dialogRef = inject(MatDialogRef<EditPatientDialogComponent>);
   private service = inject(PatientService);
-
   loading = false;
   error = '';
   success = '';
-
   form!: FormGroup;
 
-  constructor() {
-    // Initialize form after validators are bound
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Patient) {
     this.form = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.email]],
-      phone: ['', [this.phoneValidator]],
-      notes: ['']
+      name: [data.name, [Validators.required, Validators.minLength(2)]],
+      email: [data.email, [Validators.email]],
+      phone: [data.phone, [this.phoneValidator]],
+      notes: [data.notes]
     });
-    // Name: allow spaces and only capitalize on blur (to avoid interfering while typing)
-    // We'll bind (blur) in template to apply title case once the user finishes typing
-    // Phone formatting/masking
+    // Formatar valor inicial de telefone se houver (sem disparar valueChanges)
+    if (data.phone) {
+      const digitsInit = String(data.phone).replace(/\D+/g, '').slice(0, 11);
+      const formattedInit = this.formatPhone(digitsInit);
+      this.form.get('phone')!.setValue(formattedInit, { emitEvent: false });
+    }
     this.form.get('phone')!.valueChanges.subscribe((val: string) => {
       if (typeof val !== 'string') return;
       const digits = (val || '').replace(/\D+/g, '').slice(0, 11);
@@ -45,6 +45,8 @@ export class NewPatientDialogComponent {
       }
     });
   }
+
+  ngOnInit() {}
 
   toTitleCase(v: string): string {
     const lowerWords = new Set(['da', 'de', 'do', 'das', 'dos', 'e', 'di']);
@@ -67,15 +69,13 @@ export class NewPatientDialogComponent {
     if (t !== v) ctrl.setValue(t, { emitEvent: false });
   }
 
-  // Live-capitalize the first letter and letters after spaces while typing
   onNameInput(evt: Event) {
     const input = evt.target as HTMLInputElement;
     const original = input.value || '';
-    // Only adjust if needed to avoid constant churn
-    const parts = original.split(/(\s+)/); // keep spaces as tokens
+    const parts = original.split(/(\s+)/);
     for (let i = 0; i < parts.length; i++) {
       const token = parts[i];
-      if (!token || /^\s+$/.test(token)) continue; // spaces
+      if (!token || /^\s+$/.test(token)) continue;
       const lowerWords = new Set(['da', 'de', 'do', 'das', 'dos', 'e', 'di']);
       const w = token;
       const prevNonSpaceIndex = (() => {
@@ -85,7 +85,7 @@ export class NewPatientDialogComponent {
       const isFirstWord = prevNonSpaceIndex === -1;
       const lw = w.toLowerCase();
       if (!isFirstWord && lowerWords.has(lw)) {
-        parts[i] = lw; // keep lower for connector words
+        parts[i] = lw;
       } else {
         parts[i] = lw.charAt(0).toUpperCase() + lw.slice(1);
       }
@@ -94,7 +94,6 @@ export class NewPatientDialogComponent {
     if (next !== original) {
       const pos = input.selectionStart ?? next.length;
       this.form.get('name')!.setValue(next, { emitEvent: false });
-      // Restore caret position as best effort
       queueMicrotask(() => {
         try { input.setSelectionRange(pos, pos); } catch {}
       });
@@ -103,13 +102,11 @@ export class NewPatientDialogComponent {
 
   private formatPhone(d: string): string {
     if (d.length <= 10) {
-      // (11) 9999 9999
       return d
         .replace(/(\d{2})(\d)/, '($1) $2')
         .replace(/(\d{4})(\d)/, '$1 $2')
         .replace(/(\d{4})\d+$/, '$1');
     } else {
-      // (11) 99999 9999
       return d
         .replace(/(\d{2})(\d)/, '($1) $2')
         .replace(/(\d{5})(\d)/, '$1 $2')
@@ -117,16 +114,15 @@ export class NewPatientDialogComponent {
     }
   }
 
-  // Accepts both formatted and digits-only phone; validate length 10 or 11
   private isPhoneValid(val: string): boolean {
     const digits = (val || '').replace(/\D+/g, '');
-    return digits.length === 0 || digits.length === 10 || digits.length === 11; // empty allowed
+    return digits.length === 0 || digits.length === 10 || digits.length === 11;
   }
 
   phoneValidator = (control: AbstractControl): ValidationErrors | null => {
     const v = String(control.value || '');
     const digits = v.replace(/\D+/g, '');
-    if (!digits) return null; // optional field
+    if (!digits) return null;
     return digits.length === 10 || digits.length === 11 ? null : { phone: true };
   };
 
@@ -144,7 +140,6 @@ export class NewPatientDialogComponent {
       this.error = 'Preencha os campos corretamente para continuar.';
       return;
     }
-    // Apply title case once before submit
     const nameCtrl = this.form.get('name')!;
     if (nameCtrl.value) {
       const fixed = this.toTitleCase(String(nameCtrl.value));
@@ -156,17 +151,23 @@ export class NewPatientDialogComponent {
       return;
     }
     const payload = {
+      id: this.data.id,
       name: raw.name?.trim(),
       email: raw.email?.trim() || undefined,
-      phone: raw.phone ? raw.phone.replace(/\D+/g, '') : undefined, // envia só dígitos
+      phone: raw.phone ? raw.phone.replace(/\D+/g, '') : undefined,
       notes: raw.notes?.trim() || undefined
     };
     this.loading = true;
-    this.service.addPatient(payload).subscribe({
-      next: (created: Patient) => {
+    this.service.updatePatient(payload.id, {
+      name: payload.name,
+      email: payload.email,
+      phone: payload.phone,
+      notes: payload.notes
+    }).subscribe({
+      next: (updated: Patient) => {
         this.loading = false;
         this.success = 'Paciente salvo com sucesso!';
-        setTimeout(() => this.dialogRef.close(created), 1200);
+        setTimeout(() => this.dialogRef.close(updated), 1200);
       },
       error: (err: any) => {
         this.loading = false;

@@ -1,20 +1,18 @@
-<div class="menu-layout">
-  <aside class="sidebar">
-    <h3 class="title">Menu</h3>
-    <mat-nav-list>
-      <a mat-list-item *ngFor="let it of items" [routerLink]="it.link" routerLinkActive="active">{{ it.label }}</a>
-    </mat-nav-list>
-  </aside>
-
-  <section class="content">
-    <mat-card class="content-card">
-      <header class="content-header">
-        <h2 class="panel-title" matTooltip="Acesso às funcionalidades">Painel Administrativo</h2>
-        <button mat-stroked-button color="primary" matTooltip="Click me!">Click me!</button>
-      </header>
-      <div class="placeholder">
-        Selecione uma opção no menu à esquerda.
-      </div>
-    </mat-card>
-  </section>
+<div class="menu-hero">
+  <div class="hero-copy">
+    <h1>Bem-vindo(a)</h1>
+    <p>Escolha uma área para começar</p>
+  </div>
 </div>
+
+<section class="menu-grid">
+  <a class="menu-card" *ngFor="let it of items" [routerLink]="it.link">
+    <div class="icon-wrap" aria-hidden="true">
+      <span class="material-icons">arrow_forward</span>
+    </div>
+    <div class="card-content">
+      <h3>{{ it.label }}</h3>
+      <p>Acessar {{ it.label.toLowerCase() }}</p>
+    </div>
+  </a>
+</section>

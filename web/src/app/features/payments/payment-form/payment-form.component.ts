@@ -35,9 +35,10 @@ export class PaymentFormComponent {
   form!: FormGroup;
   saving = false;
   errorMsg = '';
+  // Ids devem ser UUID (36 chars) para compatibilidade com a API
   appointmentOpts = [
-    { id: 1, label: 'Terapia' },
-    { id: 2, label: 'Mentoria de carreira' },
+    { id: '11111111-1111-1111-1111-111111111111', label: 'Terapia' },
+    { id: '22222222-2222-2222-2222-222222222222', label: 'Mentoria de carreira' },
   ];
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private service: PaymentService) {
@@ -51,7 +52,7 @@ export class PaymentFormComponent {
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.service.get(id).subscribe((p) => {
+  this.service.get(id).subscribe((p) => {
         // Converte dueDate (ISO) para Date pro datepicker
         let parsedDate: Date | null = null;
         try { parsedDate = p.dueDate ? new Date(p.dueDate) : null; } catch {}
@@ -69,13 +70,14 @@ export class PaymentFormComponent {
     if (!this.form.valid || this.saving) return;
     this.saving = true;
     this.errorMsg = '';
-  const raw = this.form.value as { appointmentId: number; amount: any; dueDate: any; status: string };
+  const raw = this.form.value as { appointmentId: string; amount: any; dueDate: any; status: string };
   // Formata data para yyyy-MM-dd
   const d: Date = raw.dueDate instanceof Date ? raw.dueDate : new Date(raw.dueDate);
   const due = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   // Normaliza valor com vírgula para ponto (ex: 100,50 -> 100.50)
   const amt = typeof raw.amount === 'string' ? Number(raw.amount.replace(/\./g,'').replace(',','.')) : Number(raw.amount);
-  const payload = { appointmentId: Number(raw.appointmentId), amount: amt, dueDate: due, status: raw.status } as any;
+  // Envia appointmentId como string (UUID), conforme esperado pela API
+  const payload = { appointmentId: String(raw.appointmentId), amount: amt, dueDate: due, status: raw.status } as any;
     const id = this.route.snapshot.paramMap.get('id');
     console.log('[PAYMENTS] Salvando pagamento', payload);
   const obs = id ? this.service.update(id, payload) : this.service.create(payload);

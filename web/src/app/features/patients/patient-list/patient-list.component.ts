@@ -13,11 +13,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { NewPatientDialogComponent } from '../new-patient-dialog/new-patient-dialog.component';
+import { EditPatientDialogComponent } from '../edit-patient-dialog/edit-patient-dialog.component';
 
 @Component({
   selector: 'app-patient-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatDialogModule, MatProgressSpinnerModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatDialogModule, MatProgressSpinnerModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule, EditPatientDialogComponent],
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.scss']
 })
@@ -90,7 +91,20 @@ export class PatientList implements OnInit {
       }
     });
   }
-  edit(patient: Patient) { if (patient.id) this.router.navigate(['/patients', patient.id, 'edit']); }
+  edit(patient: Patient) {
+    if (!patient.id) return;
+    const ref = this.dialog.open(EditPatientDialogComponent, { width: '640px', data: patient });
+    ref.afterClosed().subscribe(result => {
+      if (result) {
+        // Atualiza o paciente na lista local
+        const idx = this.patients.findIndex(p => p.id === result.id);
+        if (idx !== -1) {
+          this.patients[idx] = result;
+          this.patients = [...this.patients]; // trigger change detection
+        }
+      }
+    });
+  }
   goBack() {
     if (typeof window !== 'undefined' && window.history.length > 1) {
       this.location.back();

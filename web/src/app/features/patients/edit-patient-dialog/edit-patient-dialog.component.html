@@ -1,16 +1,16 @@
-<h2 mat-dialog-title class="dialog-title">Novo Paciente</h2>
+<h2 mat-dialog-title class="dialog-title">Editar Paciente</h2>
 <div mat-dialog-content>
   <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
     <mat-form-field appearance="outline">
       <mat-label>Nome</mat-label>
-  <input matInput formControlName="name" placeholder="" (input)="onNameInput($event)" (blur)="onNameBlur()" />
-  <mat-error *ngIf="form.get('name')?.invalid && form.get('name')?.touched">Preencha um nome válido.</mat-error>
+      <input matInput formControlName="name" placeholder="" (input)="onNameInput($event)" (blur)="onNameBlur()" />
+      <mat-error *ngIf="form.get('name')?.invalid && form.get('name')?.touched">Preencha um nome válido.</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
       <input matInput type="email" formControlName="email" placeholder="email@email.com" />
-  <mat-error *ngIf="form.get('email')?.invalid && form.get('email')?.touched">Informe um email válido.</mat-error>
+      <mat-error *ngIf="form.get('email')?.invalid && form.get('email')?.touched">Informe um email válido.</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">

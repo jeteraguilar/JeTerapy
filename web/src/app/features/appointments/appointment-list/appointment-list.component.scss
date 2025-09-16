@@ -7,3 +7,8 @@
 .title { @include shared.header-title; }
 .full-table { @include shared.table-standard; margin-top:8px; }
 .bottom-actions { display:flex; gap:12px; justify-content:flex-end; margin-top:16px; }
+
+/* Align title color with Patients */
+.title { color: $brown !important; }
+/* Unify primary buttons visuals */
+.btn-primary { background-color: $brown !important; color: $offwhite !important; }
