@@ -42,3 +42,11 @@
 :host ::ng-deep td.mat-mdc-cell.mat-column-actions { width: 180px; min-width: 180px; max-width: 180px; }
 :host ::ng-deep td.mat-mdc-cell.mat-column-actions { white-space: nowrap; }
 .actions-wrap { display: inline-flex; gap: 4px; align-items: center; }
+
+/* Visual para agendamentos cancelados */
+.cancelled-row {
+	color: #a94442; /* tom vermelho suave */
+	text-decoration: line-through;
+}
+:host ::ng-deep tr.cancelled-row td.mat-mdc-cell { opacity: .85; }
+:host ::ng-deep tr.cancelled-row td.mat-mdc-cell.mat-column-actions button[disabled] { opacity: .5; }

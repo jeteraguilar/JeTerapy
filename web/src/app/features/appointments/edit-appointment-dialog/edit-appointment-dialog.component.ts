@@ -1,13 +1,15 @@
 import { Component, Inject, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 export interface AppointmentItem {
+  id?: string;
   patient: string;
   date: string; // yyyy-MM-dd
   time: string; // HH:mm
@@ -17,7 +19,7 @@ export interface AppointmentItem {
 @Component({
   selector: 'app-edit-appointment-dialog',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule, MatIconModule],
+  imports: [CommonModule, NgIf, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatDialogModule, MatIconModule],
   templateUrl: './edit-appointment-dialog.component.html',
   styleUrls: ['./edit-appointment-dialog.component.scss']
 })

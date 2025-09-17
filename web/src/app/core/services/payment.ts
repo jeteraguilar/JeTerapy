@@ -6,11 +6,11 @@ import { catchError } from 'rxjs/operators';
 export interface Payment {
   id?: string;
   // Backend espera appointmentId; 'appointment' pode existir em respostas legadas
-  appointmentId?: number;
+  appointmentId?: string; // UUID
   appointment?: string;
   amount: number;
   dueDate: string; // ISO date
-  status: 'PENDING' | 'PAID' | 'CANCELLED';
+  status?: 'PENDING' | 'PAID' | 'CANCELLED';
 }
 
 @Injectable({ providedIn: 'root' })

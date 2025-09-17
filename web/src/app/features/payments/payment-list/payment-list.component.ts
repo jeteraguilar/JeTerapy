@@ -6,10 +6,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EditPaymentDialogComponent, PaymentItem } from '../edit-payment-dialog/edit-payment-dialog.component';
+import { NewPaymentDialogComponent } from '../new-payment-dialog/new-payment-dialog.component';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PaymentService, Payment } from '../../../core/services/payment';
@@ -17,7 +19,7 @@ import { PaymentService, Payment } from '../../../core/services/payment';
 @Component({
   selector: 'app-payment-list',
   standalone: true,
-  imports: [CommonModule, NgIf, NgFor, NgClass, FormsModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule],
+  imports: [CommonModule, NgIf, NgFor, NgClass, FormsModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule, MatDialogModule, MatTooltipModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule],
   templateUrl: './payment-list.component.html',
   styleUrls: ['./payment-list.component.scss']
 })
@@ -70,7 +72,13 @@ export class PaymentListComponent {
 
   edit(row: Payment) {
     if (!row.id) return;
-    const data: PaymentItem = { id: row.id, appointment: (row as any).appointment, amount: row.amount, status: row.status, dueDate: (row as any).dueDate };
+    const data: PaymentItem = {
+      id: row.id,
+      appointment: (row as any).appointment || '',
+      amount: row.amount,
+      status: (row as any).status || 'PENDING',
+      dueDate: (row as any).dueDate || ''
+    };
     const ref = this.dialog.open(EditPaymentDialogComponent, { width: '640px', data });
     ref.afterClosed().subscribe(result => {
       if (result) {
@@ -100,7 +108,17 @@ export class PaymentListComponent {
     });
   }
 
-  new() { this.router.navigate(['/payments/new']); }
+  new() {
+    const ref = this.dialog.open(NewPaymentDialogComponent, { width: '640px' });
+    ref.afterClosed().subscribe(created => {
+      if (created) {
+        this.allPayments = [created as any, ...this.allPayments];
+        this.applyFilter();
+        this.success = 'Pagamento criado com sucesso!';
+        setTimeout(() => (this.success = ''), 2500);
+      }
+    });
+  }
   goBack() {
     // tenta histórico, se não volta para menu
     if (window?.history?.length && document?.referrer) {

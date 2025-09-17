@@ -36,4 +36,15 @@ public class PaymentController {
     public ResponseEntity<PaymentResponse> pay(@PathVariable UUID id) {
         return ResponseEntity.ok(svc.markPaid(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PaymentResponse> update(@PathVariable UUID id, @Valid @RequestBody PaymentUpdateRequest r) {
+        return ResponseEntity.ok(svc.update(id, r));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        svc.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

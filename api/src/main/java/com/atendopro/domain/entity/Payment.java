@@ -1,6 +1,9 @@
 package com.atendopro.domain.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -16,6 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@DynamicInsert
 public class Payment {
     public enum Status {PENDING, PAID, LATE}
 
@@ -26,6 +30,8 @@ public class Payment {
     private BigDecimal amount;
     private String method;
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "payment_status")
     private Status status;
     @Column(name = "due_date")
     private LocalDate dueDate;
@@ -35,6 +41,6 @@ public class Payment {
     @PrePersist
     void pre() {
         if (id == null) id = UUID.randomUUID();
-        if (status == null) status = Status.PENDING;
+        // status: manter null para permitir DEFAULT do banco (via @DynamicInsert)
     }
 }

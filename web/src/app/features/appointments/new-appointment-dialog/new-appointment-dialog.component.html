@@ -1,9 +1,11 @@
-<h2 mat-dialog-title class="dialog-title">Editar Atendimento</h2>
+<h2 mat-dialog-title class="dialog-title">Novo Atendimento</h2>
 <div mat-dialog-content>
   <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
     <mat-form-field appearance="outline">
       <mat-label>Paciente</mat-label>
-      <input matInput formControlName="patient">
+      <mat-select formControlName="patient">
+        <mat-option *ngFor="let p of patients" [value]="p.id">{{ p.name }}</mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline">

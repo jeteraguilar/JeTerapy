@@ -8,17 +8,20 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { NewPatientDialogComponent } from '../new-patient-dialog/new-patient-dialog.component';
 import { EditPatientDialogComponent } from '../edit-patient-dialog/edit-patient-dialog.component';
+import { ConfirmDeleteDialogComponent } from '../../../shared/confirm-delete-dialog/confirm-delete-dialog.component';
 
 @Component({
   selector: 'app-patient-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatDialogModule, MatProgressSpinnerModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatDialogModule, MatProgressSpinnerModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule],
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.scss']
 })
@@ -33,6 +36,9 @@ export class PatientList implements OnInit {
   total = 0;
   totalPages = 0;
   q = '';
+  // combo options for names and the current selection
+  nameOptions: string[] = [];
+  selectedName: string = '';
   private platformId = inject(PLATFORM_ID);
 
   constructor(private patientService: PatientService, private router: Router, private location: Location, private dialog: MatDialog) {}
@@ -40,6 +46,16 @@ export class PatientList implements OnInit {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.load();
+      // load up to 200 names for the combo (saved options)
+      this.patientService.getPatients(200).subscribe({
+        next: (list) => {
+          this.nameOptions = Array.from(new Set((list || []).map(x => x.name).filter((n): n is string => !!n)))
+            .sort((a,b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
+        },
+        error: () => {
+          // silently ignore; options will fallback to current page
+        }
+      });
     } else {
       this.loading = false; // evita spinner infinito no SSR
     }
@@ -52,6 +68,9 @@ export class PatientList implements OnInit {
         this.patients = p.content;
         this.total = p.totalElements;
         this.totalPages = p.totalPages;
+        // build unique, sorted name options from current page
+        this.nameOptions = Array.from(new Set((this.patients || []).map(x => x.name).filter((n): n is string => !!n)))
+          .sort((a,b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
         this.loading = false;
       },
       error: () => {
@@ -63,9 +82,20 @@ export class PatientList implements OnInit {
 
   search() { this.page = 0; this.load(); }
 
+  onNameChange(value: string) {
+    // selecting a name sets the query and triggers search; empty resets
+    this.selectedName = value || '';
+    this.q = this.selectedName;
+    this.search();
+  }
+
   delete(p: Patient) {
     if (!p.id) return;
-    const ref = this.dialog.open(ConfirmDeleteDialog, { data: { name: p.name } });
+    const ref = this.dialog.open(ConfirmDeleteDialogComponent, { data: {
+      title: 'Excluir Paciente',
+      message: `Tem certeza que deseja excluir "${p.name}"? Esta ação não pode ser desfeita.`,
+      confirmLabel: 'Excluir'
+    }});
     ref.afterClosed().subscribe(ok => {
       if (!ok) return;
       this.patientService.deletePatient(p.id!).subscribe({
@@ -121,24 +151,4 @@ export class PatientList implements OnInit {
   }
 }
 
-// Simple confirm delete dialog
-import { Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component as NgComponent } from '@angular/core';
-
-@NgComponent({
-  selector: 'confirm-delete-dialog',
-  template: `
-    <h2 mat-dialog-title>Excluir paciente</h2>
-    <div mat-dialog-content>Tem certeza que deseja excluir "{{ data.name }}"? Esta ação não pode ser desfeita.</div>
-    <div mat-dialog-actions align="end">
-      <button mat-stroked-button mat-dialog-close="false">Cancelar</button>
-      <button mat-raised-button color="warn" [mat-dialog-close]="true">Excluir</button>
-    </div>
-  `,
-  standalone: true,
-  imports: [MatButtonModule, MatDialogModule]
-})
-export class ConfirmDeleteDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { name: string }) {}
-}
+// Removed local confirm dialog in favor of shared ConfirmDeleteDialogComponent

@@ -1,0 +1,43 @@
+<h2 mat-dialog-title class="dialog-title">Novo Pagamento</h2>
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+    <mat-form-field appearance="outline" class="full-row">
+      <mat-label>Consulta (UUID)</mat-label>
+      <input matInput formControlName="appointmentId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+      <mat-error *ngIf="form.get('appointmentId')?.invalid && form.get('appointmentId')?.touched">Informe um UUID válido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Valor</mat-label>
+      <input matInput type="number" step="0.01" min="0" formControlName="amount">
+      <mat-error *ngIf="form.get('amount')?.invalid && form.get('amount')?.touched">Informe um valor válido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Método</mat-label>
+      <mat-select formControlName="method">
+        <mat-option value="PIX">PIX</mat-option>
+        <mat-option value="DINHEIRO">Dinheiro</mat-option>
+        <mat-option value="CARTAO">Cartão</mat-option>
+        <mat-option value="TRANSFERENCIA">Transferência</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Vencimento</mat-label>
+      <input matInput type="date" formControlName="dueDate">
+    </mat-form-field>
+  </form>
+  <div class="alert success" *ngIf="success">
+    <mat-icon>check_circle</mat-icon>
+    <span>{{ success }}</span>
+  </div>
+  <div class="alert error" *ngIf="error">
+    <mat-icon>error</mat-icon>
+    <span>{{ error }}</span>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="cancel()" [disabled]="loading || !!success">Cancelar</button>
+  <button mat-raised-button color="primary" class="btn-primary" (click)="submit()" [disabled]="loading || !!success">Salvar</button>
+</div>

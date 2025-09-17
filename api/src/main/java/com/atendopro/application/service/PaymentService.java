@@ -33,4 +33,18 @@ public class PaymentService {
         p.setPaidAt(java.time.LocalDateTime.now());
         return Mappers.toResp(repo.save(p));
     }
+
+    public PaymentResponse update(UUID id, PaymentUpdateRequest r) {
+        var p = repo.findById(id).orElseThrow();
+        if (r.getAppointmentId() != null) p.setAppointmentId(r.getAppointmentId());
+        if (r.getAmount() != null) p.setAmount(r.getAmount());
+        if (r.getMethod() != null) p.setMethod(r.getMethod());
+        if (r.getDueDate() != null) p.setDueDate(r.getDueDate());
+        if (r.getStatus() != null) p.setStatus(r.getStatus());
+        return Mappers.toResp(repo.save(p));
+    }
+
+    public void delete(UUID id) {
+        repo.deleteById(id);
+    }
 }
