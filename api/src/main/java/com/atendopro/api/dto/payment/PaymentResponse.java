@@ -14,6 +14,7 @@ public class PaymentResponse {
     private UUID appointmentId;
     private BigDecimal amount;
     private String method;
+    private String consultationType;
     private String status;
     private LocalDate dueDate;
     private LocalDateTime paidAt;

@@ -98,3 +98,18 @@
 .pager.center { justify-self: center; text-align: center; }
 .footer-spacer { justify-self: start; }
 .right-buttons { justify-self: end; display:flex; gap:12px; align-items:center; }
+
+/* Contact cells (email / WhatsApp) */
+.contact-cell { display:inline-flex; align-items:center; gap:4px; }
+.contact-link { color: $brown-dark; text-decoration: underline; cursor: pointer; font-size: 13px; }
+.contact-link:hover { text-decoration: none; }
+.icon-btn { width:28px; height:28px; line-height:28px; }
+.icon-btn mat-icon { font-size:18px; width:18px; height:18px; }
+/* Unified inline anchor with icon and text */
+.contact-inline { display:inline-flex; align-items:center; gap:4px; text-decoration:none; color:$brown-dark; font-size:13px; line-height:1.2; }
+.contact-inline:hover .text { text-decoration: underline; }
+.contact-inline .ci { font-size:16px; width:16px; height:16px; line-height:16px; }
+
+/* WhatsApp SVG icon wrapper */
+.wa-icon { width:16px; height:16px; display:inline-block; }
+.wa-icon svg { width:100%; height:100%; display:block; }

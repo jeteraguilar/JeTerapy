@@ -5,11 +5,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ImageLoaderComponent } from '../../shared/image-loader/image-loader.component';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatCardModule, MatButtonModule, MatListModule, MatTooltipModule],
+  imports: [CommonModule, RouterLink, MatCardModule, MatButtonModule, MatListModule, MatTooltipModule, ImageLoaderComponent],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })

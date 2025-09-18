@@ -9,6 +9,7 @@ export interface Patient {
   email?: string;
   phone?: string;
   notes?: string;
+  contractType?: string; // INDIVIDUAL | PLANO_INVESTIMENTO
 }
 
 export interface Page<T> {

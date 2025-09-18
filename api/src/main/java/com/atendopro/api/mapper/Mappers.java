@@ -12,7 +12,15 @@ public class Mappers {
     }
 
     public static PaymentResponse toResp(Payment p) {
-        return PaymentResponse.builder().id(p.getId()).appointmentId(p.getAppointmentId()).amount(p.getAmount()).method(
-                p.getMethod()).status(p.getStatus().name()).dueDate(p.getDueDate()).paidAt(p.getPaidAt()).build();
+        return PaymentResponse.builder()
+                .id(p.getId())
+                .appointmentId(p.getAppointmentId())
+                .amount(p.getAmount())
+                .method(p.getMethod())
+                .consultationType(p.getConsultationType())
+                .status(p.getStatus() == null ? null : p.getStatus().name())
+                .dueDate(p.getDueDate())
+                .paidAt(p.getPaidAt())
+                .build();
     }
 }

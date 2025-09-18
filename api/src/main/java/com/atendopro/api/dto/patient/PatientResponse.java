@@ -14,5 +14,6 @@ public class PatientResponse {
     private String email;
     private String phone;
     private String notes;
+    private String contractType;
     private Instant createdAt;
 }

@@ -6,8 +6,9 @@ import { catchError } from 'rxjs/operators';
 export interface Payment {
   id?: string;
   // Backend espera appointmentId; 'appointment' pode existir em respostas legadas
-  appointmentId?: string; // UUID
-  appointment?: string;
+  appointmentId?: string; // (legacy) UUID de consulta agendada se existir
+  appointment?: string;   // (legacy display)
+  consultationType?: string; // TERAPIA | MENTORIA_CARREIRA
   amount: number;
   dueDate: string; // ISO date
   status?: 'PENDING' | 'PAID' | 'CANCELLED';

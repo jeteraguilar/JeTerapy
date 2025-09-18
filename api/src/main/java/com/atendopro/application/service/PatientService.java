@@ -21,7 +21,13 @@ public class PatientService {
                 throw new IllegalArgumentException("Já existe um paciente cadastrado com este e-mail.");
             });
         }
-        var p = Patient.builder().name(r.getName()).email(r.getEmail()).phone(r.getPhone()).notes(r.getNotes()).build();
+    var p = Patient.builder()
+        .name(r.getName())
+        .email(r.getEmail())
+        .phone(r.getPhone())
+        .notes(r.getNotes())
+        .contractType(r.getContractType() == null || r.getContractType().isBlank() ? "INDIVIDUAL" : r.getContractType())
+        .build();
         p = repo.save(p);
         return toResp(p);
     }
@@ -49,6 +55,9 @@ public class PatientService {
         p.setEmail(r.getEmail());
         p.setPhone(r.getPhone());
         p.setNotes(r.getNotes());
+        if (r.getContractType() != null && !r.getContractType().isBlank()) {
+            p.setContractType(r.getContractType());
+        }
         return toResp(repo.save(p));
     }
 
@@ -57,6 +66,14 @@ public class PatientService {
     }
 
     private PatientResponse toResp(Patient p) {
-        return PatientResponse.builder().id(p.getId()).name(p.getName()).email(p.getEmail()).phone(p.getPhone()).notes(p.getNotes()).createdAt(p.getCreatedAt()).build();
+    return PatientResponse.builder()
+        .id(p.getId())
+        .name(p.getName())
+        .email(p.getEmail())
+        .phone(p.getPhone())
+        .notes(p.getNotes())
+        .contractType(p.getContractType())
+        .createdAt(p.getCreatedAt())
+        .build();
     }
 }

@@ -1,31 +1,54 @@
 {
-  "$schema": "https://schema.visualstudio.com/schemas/tasks/v1_0_0/tasks.schema.json",
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "frontend: start",
-      "type": "shell",
-      "command": "npm",
-      "args": ["run", "start"],
-      "options": { "cwd": "C:/atendopro-monorepo/web" },
-      "isBackground": true,
-      "group": "build"
-    },
-    {
-      "label": "backend: start",
-      "type": "shell",
-      "command": "mvn",
-      "args": ["spring-boot:run"],
-      "options": { "cwd": "C:/atendopro-monorepo/api" },
-      "isBackground": true,
-      "group": "build"
-    },
-    {
-      "label": "dev: start all",
-      "type": "shell",
-      "command": "echo starting front+back && exit 0",
-      "dependsOn": ["frontend: start", "backend: start"],
-      "dependsOrder": "parallel"
-    }
-  ]
+	"$schema": "https://schema.visualstudio.com/schemas/tasks/v1_0_0/tasks.schema.json",
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "frontend: start",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"start"
+			],
+			"options": {
+				"cwd": "C:/atendopro-monorepo/web"
+			},
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "backend: start",
+			"type": "shell",
+			"command": "mvn",
+			"args": [
+				"spring-boot:run"
+			],
+			"options": {
+				"cwd": "C:/atendopro-monorepo/api"
+			},
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "dev: start all",
+			"type": "shell",
+			"command": "echo starting front+back && exit 0",
+			"dependsOn": [
+				"frontend: start",
+				"backend: start"
+			],
+			"dependsOrder": "parallel"
+		},
+		{
+			"label": "frontend: start",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"start"
+			],
+			"isBackground": true,
+			"group": "build"
+		}
+	]
 }

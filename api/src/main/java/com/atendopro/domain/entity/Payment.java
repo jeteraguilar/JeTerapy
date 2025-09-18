@@ -25,10 +25,12 @@ public class Payment {
 
     @Id
     private UUID id;
-    @Column(name = "appointment_id")
-    private UUID appointmentId;
+    @Column(name = "appointment_id", nullable = true)
+    private UUID appointmentId; // agora opcional
     private BigDecimal amount;
     private String method;
+    @Column(name = "consultation_type")
+    private String consultationType; // TERAPIA | MENTORIA_CARREIRA
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(columnDefinition = "payment_status")
@@ -42,5 +44,6 @@ public class Payment {
     void pre() {
         if (id == null) id = UUID.randomUUID();
         // status: manter null para permitir DEFAULT do banco (via @DynamicInsert)
+        if (consultationType == null) consultationType = "TERAPIA";
     }
 }

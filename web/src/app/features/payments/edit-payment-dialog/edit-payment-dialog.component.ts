@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 import { PaymentService } from '../../../core/services/payment';
 
 export interface PaymentItem { id?: string; appointment?: string; amount: number; status: string; dueDate: string }
@@ -13,7 +14,7 @@ export interface PaymentItem { id?: string; appointment?: string; amount: number
 @Component({
   selector: 'app-edit-payment-dialog',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule, MatIconModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatDialogModule, MatIconModule],
   templateUrl: './edit-payment-dialog.component.html',
   styleUrls: ['./edit-payment-dialog.component.scss']
 })
@@ -27,7 +28,7 @@ export class EditPaymentDialogComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: PaymentItem) {
     this.form = this.fb.group({
-      appointment: [data.appointment || '', Validators.required],
+      consultationType: ['TERAPIA', Validators.required],
       amount: [data.amount, Validators.required],
       status: [data.status || 'PENDING', Validators.required],
       dueDate: [data.dueDate, Validators.required]

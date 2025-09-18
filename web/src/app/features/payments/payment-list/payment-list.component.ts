@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule, NgIf, NgFor, NgClass } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -19,12 +19,12 @@ import { PaymentService, Payment } from '../../../core/services/payment';
 @Component({
   selector: 'app-payment-list',
   standalone: true,
-  imports: [CommonModule, NgIf, NgFor, NgClass, FormsModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule, MatDialogModule, MatTooltipModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule],
+  imports: [CommonModule, NgIf, FormsModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule, MatDialogModule, MatTooltipModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule],
   templateUrl: './payment-list.component.html',
   styleUrls: ['./payment-list.component.scss']
 })
 export class PaymentListComponent {
-  displayedColumns = ['appointment', 'amount', 'status', 'dueDate', 'actions'];
+  displayedColumns = ['consultationType', 'amount', 'status', 'dueDate', 'actions'];
   payments: Payment[] = [];
   private allPayments: Payment[] = [];
   success = '';
@@ -58,7 +58,7 @@ export class PaymentListComponent {
     let filtered = this.allPayments;
     if (term) {
       filtered = this.allPayments.filter((p: any) =>
-        (p.appointment || '').toLowerCase().includes(term) ||
+        (p.consultationType || '').toLowerCase().includes(term) ||
         (p.status || '').toLowerCase().includes(term)
       );
     }

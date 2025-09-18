@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { PatientService, Patient } from '../../../core/services/patient';
+import { formatPhoneDisplay, normalizePhoneDigits, validatePhone } from '../../../core/util/phone.util';
 
 @Component({
   selector: 'app-new-patient-dialog',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule, MatIconModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatDialogModule, MatIconModule],
   templateUrl: './new-patient-dialog.component.html',
   styleUrls: ['./new-patient-dialog.component.scss']
 })
@@ -32,6 +34,7 @@ export class NewPatientDialogComponent {
       name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.email]],
       phone: ['', [this.phoneValidator]],
+      contractType: ['INDIVIDUAL'],
       notes: ['']
     });
     // Name: allow spaces and only capitalize on blur (to avoid interfering while typing)
@@ -39,11 +42,9 @@ export class NewPatientDialogComponent {
     // Phone formatting/masking
     this.form.get('phone')!.valueChanges.subscribe((val: string) => {
       if (typeof val !== 'string') return;
-      const digits = (val || '').replace(/\D+/g, '').slice(0, 11);
-      const formatted = this.formatPhone(digits);
-      if (val !== formatted) {
-        this.form.get('phone')!.setValue(formatted, { emitEvent: false });
-      }
+      const digits = normalizePhoneDigits(val);
+      const formatted = formatPhoneDisplay(digits);
+      if (val !== formatted) this.form.get('phone')!.setValue(formatted, { emitEvent: false });
     });
   }
 
@@ -102,27 +103,7 @@ export class NewPatientDialogComponent {
     }
   }
 
-  private formatPhone(d: string): string {
-    if (d.length <= 10) {
-      // (11) 9999 9999
-      return d
-        .replace(/(\d{2})(\d)/, '($1) $2')
-        .replace(/(\d{4})(\d)/, '$1 $2')
-        .replace(/(\d{4})\d+$/, '$1');
-    } else {
-      // (11) 99999 9999
-      return d
-        .replace(/(\d{2})(\d)/, '($1) $2')
-        .replace(/(\d{5})(\d)/, '$1 $2')
-        .replace(/(\d{4})\d+$/, '$1');
-    }
-  }
-
-  // Accepts both formatted and digits-only phone; validate length 10 or 11
-  private isPhoneValid(val: string): boolean {
-    const digits = (val || '').replace(/\D+/g, '');
-    return digits.length === 0 || digits.length === 10 || digits.length === 11; // empty allowed
-  }
+  private isPhoneValid(val: string): boolean { return validatePhone(val); }
 
   phoneValidator = (control: AbstractControl): ValidationErrors | null => {
     const v = String(control.value || '');
@@ -153,14 +134,15 @@ export class NewPatientDialogComponent {
     }
     const raw = this.form.getRawValue();
     if (raw.phone && !this.isPhoneValid(raw.phone)) {
-      this.error = 'Informe um telefone válido (ex.: 11999999999 ou (11) 99999 9999).';
+      this.error = 'Informe um telefone válido (ex.: (11) 99876-5432, (11) 2345-6789, (415) 555-1212, +1 (305) 555-7788).';
       return;
     }
     const payload = {
       name: raw.name?.trim(),
       email: raw.email?.trim() || undefined,
-      phone: raw.phone ? raw.phone.replace(/\D+/g, '') : undefined, // envia só dígitos
-      notes: raw.notes?.trim() || undefined
+  phone: raw.phone ? normalizePhoneDigits(raw.phone) : undefined, // envia só dígitos
+      notes: raw.notes?.trim() || undefined,
+      contractType: raw.contractType || 'INDIVIDUAL'
     };
     this.loading = true;
     this.service.addPatient(payload).subscribe({

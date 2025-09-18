@@ -21,6 +21,8 @@ public class Patient {
     private String phone;
     @Column(columnDefinition = "TEXT")
     private String notes;
+    @Column(name = "contract_type")
+    private String contractType; // INDIVIDUAL | PLANO_INVESTIMENTO
     @Column(name = "created_at")
     private Instant createdAt;
 
@@ -28,5 +30,6 @@ public class Patient {
     void pre() {
         if (id == null) id = UUID.randomUUID();
         if (createdAt == null) createdAt = Instant.now();
+        if (contractType == null) contractType = "INDIVIDUAL";
     }
 }

@@ -22,8 +22,8 @@ export class NewPaymentDialogComponent {
   private service = inject(PaymentService);
 
   form: FormGroup = this.fb.group({
-    appointmentId: ['', [Validators.required, Validators.minLength(36), Validators.maxLength(36)]],
-    amount: [null, [Validators.required, Validators.min(0)]] ,
+    consultationType: ['TERAPIA', [Validators.required]],
+    amount: [null, [Validators.required, Validators.min(0)]],
     method: [''],
     dueDate: ['', Validators.required]
   });
@@ -37,10 +37,10 @@ export class NewPaymentDialogComponent {
     if (this.form.invalid) { this.form.markAllAsTouched(); this.error = 'Preencha os campos corretamente para continuar.'; return; }
     const v = this.form.getRawValue();
     const payload: Payment = {
-      appointmentId: v.appointmentId,
       amount: Number(v.amount),
       method: v.method || undefined,
-      dueDate: v.dueDate
+      dueDate: v.dueDate,
+      consultationType: v.consultationType
     } as any;
     this.loading = true;
     this.service.create(payload).subscribe({

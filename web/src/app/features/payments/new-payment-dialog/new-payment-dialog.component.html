@@ -2,9 +2,11 @@
 <div mat-dialog-content>
   <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
     <mat-form-field appearance="outline" class="full-row">
-      <mat-label>Consulta (UUID)</mat-label>
-      <input matInput formControlName="appointmentId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
-      <mat-error *ngIf="form.get('appointmentId')?.invalid && form.get('appointmentId')?.touched">Informe um UUID válido.</mat-error>
+      <mat-label>Tipo de Consulta</mat-label>
+      <mat-select formControlName="consultationType">
+        <mat-option value="TERAPIA">Terapia</mat-option>
+        <mat-option value="MENTORIA_CARREIRA">Mentoria de Carreira</mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline">

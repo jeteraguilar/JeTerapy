@@ -21,9 +21,9 @@
 
       <table mat-table [dataSource]="payments" class="mat-elevation-z2 full-table">
 
-        <ng-container matColumnDef="appointment">
-          <th mat-header-cell *matHeaderCellDef>Consulta</th>
-          <td mat-cell *matCellDef="let row">{{ row.appointment }}</td>
+        <ng-container matColumnDef="consultationType">
+          <th mat-header-cell *matHeaderCellDef>Tipo Consulta</th>
+          <td mat-cell *matCellDef="let row">{{ row.consultationType === 'MENTORIA_CARREIRA' ? 'Mentoria de Carreira' : 'Terapia' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="amount">

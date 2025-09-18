@@ -11,9 +11,8 @@ import java.util.UUID;
 @Getter
 @Setter
 public class PaymentRequest {
-    @NotNull
     @JsonAlias({"appointment_id"})
-    private UUID appointmentId;
+    private UUID appointmentId; // agora opcional (pode ser null se pagamento desvinculado de agendamento)
     @NotNull
     @DecimalMin("0.0")
     private BigDecimal amount;
@@ -21,4 +20,6 @@ public class PaymentRequest {
     private String method;
     @JsonAlias({"due_date"})
     private LocalDate dueDate;
+    @JsonAlias({"consultation_type"})
+    private String consultationType; // TERAPIA | MENTORIA_CARREIRA
 }

@@ -19,4 +19,6 @@ public class PaymentUpdateRequest {
     @JsonAlias({"due_date"})
     private LocalDate dueDate;           // opcional
     private Payment.Status status;       // opcional
+    @JsonAlias({"consultation_type"})
+    private String consultationType;     // opcional
 }

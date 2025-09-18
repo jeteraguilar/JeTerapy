@@ -15,8 +15,17 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Telefone</mat-label>
-      <input matInput formControlName="phone" placeholder="(11) 99999 9999" />
-      <mat-error *ngIf="isPhoneInvalid()">Informe um telefone válido.</mat-error>
+      <input matInput formControlName="phone" placeholder="(11) 99876-5432" />
+      <mat-hint align="start">Ex.: (11) 99876-5432, (11) 2345-6789, (415) 555-1212, +1 (305) 555-7788</mat-hint>
+      <mat-error *ngIf="isPhoneInvalid()">Informe um telefone válido (BR ou EUA).</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo Contratação</mat-label>
+      <mat-select formControlName="contractType">
+        <mat-option value="INDIVIDUAL">Individual</mat-option>
+        <mat-option value="PLANO_INVESTIMENTO">Plano Investimento</mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-row">

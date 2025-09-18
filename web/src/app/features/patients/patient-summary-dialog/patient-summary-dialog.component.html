@@ -1,0 +1,49 @@
+<h2 mat-dialog-title class="dialog-title">Resumo do Paciente</h2>
+<div mat-dialog-content>
+  <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" class="full-row">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" />
+      <mat-error *ngIf="form.get('name')?.invalid && form.get('name')?.touched">Informe um nome válido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Status Pagamento</mat-label>
+      <mat-select formControlName="paymentStatus">
+        <mat-option *ngFor="let s of paymentStatusOptions" [value]="s.value">{{ s.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Status Sessão</mat-label>
+      <mat-select formControlName="sessionStatus">
+        <mat-option *ngFor="let s of sessionStatusOptions" [value]="s.value">{{ s.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Telefone</mat-label>
+      <input matInput [value]="formattedPhone" readonly />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo Contratação</mat-label>
+      <mat-select formControlName="contractType">
+        <mat-option value="INDIVIDUAL">Individual</mat-option>
+        <mat-option value="PLANO_INVESTIMENTO">Plano Investimento</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+  <div class="alert success" *ngIf="success">
+    <mat-icon>check_circle</mat-icon>
+    <span>{{ success }}</span>
+  </div>
+  <div class="alert error" *ngIf="error">
+    <mat-icon>error</mat-icon>
+    <span>{{ error }}</span>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="cancel()" [disabled]="saving">Cancelar</button>
+  <button mat-raised-button color="primary" class="btn-primary" (click)="submit()" [disabled]="saving">{{ saving ? 'Salvando...' : 'Salvar' }}</button>
+</div>

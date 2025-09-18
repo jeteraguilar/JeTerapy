@@ -15,7 +15,14 @@ public class PaymentService {
     private final PaymentRepository repo;
 
     public PaymentResponse create(PaymentRequest r) {
-        var p = Payment.builder().appointmentId(r.getAppointmentId()).amount(r.getAmount()).method(r.getMethod()).dueDate(r.getDueDate()).build();
+    // appointmentId agora pode ser null (pagamento independente de agendamento)
+    var p = Payment.builder()
+        .appointmentId(r.getAppointmentId())
+        .amount(r.getAmount())
+        .method(r.getMethod())
+        .consultationType(r.getConsultationType() == null || r.getConsultationType().isBlank() ? "TERAPIA" : r.getConsultationType())
+        .dueDate(r.getDueDate())
+        .build();
         return Mappers.toResp(repo.save(p));
     }
 
@@ -41,6 +48,7 @@ public class PaymentService {
         if (r.getMethod() != null) p.setMethod(r.getMethod());
         if (r.getDueDate() != null) p.setDueDate(r.getDueDate());
         if (r.getStatus() != null) p.setStatus(r.getStatus());
+        if (r.getConsultationType() != null && !r.getConsultationType().isBlank()) p.setConsultationType(r.getConsultationType());
         return Mappers.toResp(repo.save(p));
     }
 

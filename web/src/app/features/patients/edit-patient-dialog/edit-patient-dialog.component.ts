@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PatientService, Patient } from '../../../core/services/patient';
+import { formatPhoneDisplay, normalizePhoneDigits, validatePhone } from '../../../core/util/phone.util';
 
 @Component({
   selector: 'app-edit-patient-dialog',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule, MatIconModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatDialogModule, MatIconModule],
   templateUrl: './edit-patient-dialog.component.html',
   styleUrls: ['./edit-patient-dialog.component.scss']
 })
@@ -29,21 +31,19 @@ export class EditPatientDialogComponent implements OnInit {
       name: [data.name, [Validators.required, Validators.minLength(2)]],
       email: [data.email, [Validators.email]],
       phone: [data.phone, [this.phoneValidator]],
+      contractType: [data.contractType || 'INDIVIDUAL'],
       notes: [data.notes]
     });
     // Formatar valor inicial de telefone se houver (sem disparar valueChanges)
     if (data.phone) {
-      const digitsInit = String(data.phone).replace(/\D+/g, '').slice(0, 11);
-      const formattedInit = this.formatPhone(digitsInit);
-      this.form.get('phone')!.setValue(formattedInit, { emitEvent: false });
+      const digitsInit = normalizePhoneDigits(data.phone);
+      this.form.get('phone')!.setValue(formatPhoneDisplay(digitsInit), { emitEvent: false });
     }
     this.form.get('phone')!.valueChanges.subscribe((val: string) => {
       if (typeof val !== 'string') return;
-      const digits = (val || '').replace(/\D+/g, '').slice(0, 11);
-      const formatted = this.formatPhone(digits);
-      if (val !== formatted) {
-        this.form.get('phone')!.setValue(formatted, { emitEvent: false });
-      }
+      const digits = normalizePhoneDigits(val);
+      const formatted = formatPhoneDisplay(digits);
+      if (val !== formatted) this.form.get('phone')!.setValue(formatted, { emitEvent: false });
     });
   }
 
@@ -101,24 +101,7 @@ export class EditPatientDialogComponent implements OnInit {
     }
   }
 
-  private formatPhone(d: string): string {
-    if (d.length <= 10) {
-      return d
-        .replace(/(\d{2})(\d)/, '($1) $2')
-        .replace(/(\d{4})(\d)/, '$1 $2')
-        .replace(/(\d{4})\d+$/, '$1');
-    } else {
-      return d
-        .replace(/(\d{2})(\d)/, '($1) $2')
-        .replace(/(\d{5})(\d)/, '$1 $2')
-        .replace(/(\d{4})\d+$/, '$1');
-    }
-  }
-
-  private isPhoneValid(val: string): boolean {
-    const digits = (val || '').replace(/\D+/g, '');
-    return digits.length === 0 || digits.length === 10 || digits.length === 11;
-  }
+  private isPhoneValid(val: string): boolean { return validatePhone(val); }
 
   phoneValidator = (control: AbstractControl): ValidationErrors | null => {
     const v = String(control.value || '');
@@ -148,14 +131,15 @@ export class EditPatientDialogComponent implements OnInit {
     }
     const raw = this.form.getRawValue();
     if (raw.phone && !this.isPhoneValid(raw.phone)) {
-      this.error = 'Informe um telefone válido (ex.: 11999999999 ou (11) 99999 9999).';
+      this.error = 'Informe um telefone válido (ex.: (11) 99876-5432, (11) 2345-6789, (415) 555-1212, +1 (305) 555-7788).';
       return;
     }
     const payload = {
       id: this.data.id,
       name: raw.name?.trim(),
       email: raw.email?.trim() || undefined,
-      phone: raw.phone ? raw.phone.replace(/\D+/g, '') : undefined,
+  phone: raw.phone ? normalizePhoneDigits(raw.phone) : undefined,
+      contractType: raw.contractType || 'INDIVIDUAL',
       notes: raw.notes?.trim() || undefined
     };
     this.loading = true;
@@ -163,7 +147,8 @@ export class EditPatientDialogComponent implements OnInit {
       name: payload.name,
       email: payload.email,
       phone: payload.phone,
-      notes: payload.notes
+      notes: payload.notes,
+      contractType: payload.contractType
     }).subscribe({
       next: (updated: Patient) => {
         this.loading = false;
